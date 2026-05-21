@@ -49,8 +49,8 @@ function hitungNewton(){
   100
 
   // ================================
-  // MODEL POLINOMIAL
-  // H(t)=H0-r t²
+  // MODEL POLINOMIAL NON-LINEAR
+  // H(t)=H0-r²t²
   // ================================
 
   function f(r){
@@ -58,7 +58,11 @@ function hitungNewton(){
     return (
       H0
       -
-      (r * Math.pow(t,2))
+      (
+        Math.pow(r,2)
+        *
+        Math.pow(t,2)
+      )
       -
       Ht
     )
@@ -66,13 +70,17 @@ function hitungNewton(){
   }
 
   // ================================
-  // TURUNAN
+  // TURUNAN f'(r)
   // ================================
 
   function fp(r){
 
     return (
-      -Math.pow(t,2)
+      -2
+      *
+      r
+      *
+      Math.pow(t,2)
     )
 
   }
@@ -83,9 +91,17 @@ function hitungNewton(){
 
   let dataGrafik = []
 
+  // ================================
+  // ITERASI NEWTON RAPHSON
+  // ================================
+
   while(iterasi < maxIter){
 
     let rLama = r
+
+    // ============================
+    // RUMUS NEWTON RAPHSON
+    // ============================
 
     let rBaru =
     r -
@@ -132,6 +148,14 @@ function hitungNewton(){
         </td>
 
         <td>
+          ${f(rLama).toFixed(8)}
+        </td>
+
+        <td>
+          ${fp(rLama).toFixed(8)}
+        </td>
+
+        <td>
           ${error.toExponential(3)}
         </td>
 
@@ -143,18 +167,29 @@ function hitungNewton(){
 
     `
 
+    // ============================
+    // DATA GRAFIK
+    // ============================
+
     dataGrafik.push(rBaru)
+
+    // ============================
+    // UPDATE NILAI r
+    // ============================
+
+    r = rBaru
+
+    // ============================
+    // KONDISI BERHENTI
+    // ============================
 
     if(
       error < toleransi
     ){
 
-      r = rBaru
-
       break
-    }
 
-    r = rBaru
+    }
 
     iterasi++
 
@@ -331,7 +366,8 @@ function buatTabelProyeksi(
     let luasHutan =
     H0 -
     (
-      r *
+      Math.pow(r,2)
+      *
       Math.pow(i,2)
     )
 
